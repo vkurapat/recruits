@@ -4,3 +4,32 @@ author: "Var Kurapati"
 format: html
 ---
 
+```{r}
+#| message: false
+library(tidyverse)
+library(primer.tutorials)
+library(broom)
+```
+
+People vary in height, and that variation is strongly patterned by sex. Using a 50-row sample drawn from the National Health and Nutrition Examination Survey (NHANES), collected by the U.S. Centers for Disease Control and Prevention from civilians aged 18–27, we seek to estimate the average height of male and female USMC recruits for the coming year. However, since USMC recruits are screened volunteers who must meet fitness standards, they are likely taller than the general young-adult population, so our estimates may slightly understate true recruit heights.
+
+
+```{r}
+recruits |>
+  ggplot(aes(x = height, fill = sex)) +
+  geom_density(alpha = 0.5) +
+  labs(
+    title = "Height Distribution of USMC Recruits by Sex",
+    subtitle = "Male recruits are taller on average, with substantial overlap in the tails",
+    x = "Height (cm)",
+    y = "Density",
+    fill = "Sex",
+    caption = "Source: 50-row sample from NHANES via primer.tutorials::recruits"
+  )
+```
+
+```{r}
+recruits |> count(sex)
+```
+
+
