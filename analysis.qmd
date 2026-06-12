@@ -15,8 +15,10 @@ library(broom)
 library(marginaleffects)
 ```
 
-People vary in height, and that variation is strongly patterned by sex. Using a 50-row sample drawn from the National Health and Nutrition Examination Survey (NHANES), collected by the U.S. Centers for Disease Control and Prevention from civilians aged 18–27, we seek to estimate the average height of male and female USMC recruits for the coming year. However, since USMC recruits are screened volunteers who must meet fitness standards, they are likely taller than the general young-adult population, so our estimates may slightly understate true recruit heights. We estimate that male recruits will average about 174.8 cm in height (95% CI: 172.5–177.0 cm) and female recruits about 165.9 cm (95% CI: 161.8–170.0 cm), with the wider interval for female recruits reflecting the smaller number of female observations in our sample.
-
+```{r}
+#| cache: true
+fit_recruits <- linear_reg() |> set_engine("lm") |> fit(height ~ sex, data = recruits)
+```
 
 ```{r}
 recruits |>
@@ -30,16 +32,6 @@ recruits |>
     fill = "Sex",
     caption = "Source: 50-row sample from NHANES via primer.tutorials::recruits"
   )
-```
-
-
-```{r}
-#| cache: true
-fit_recruits <- linear_reg() |> set_engine("lm") |> fit(height ~ sex, data = recruits)
-```
-
-```{r}
-tidy(fit_recruits, conf.int = TRUE)
 ```
 
 ```{r}
@@ -57,6 +49,7 @@ plot_predictions(fit_recruits, condition = "sex", draw = FALSE) |>
   )
 ```
 
+People vary in height, and that variation is strongly patterned by sex. Using a 50-row sample drawn from the National Health and Nutrition Examination Survey (NHANES), collected by the U.S. Centers for Disease Control and Prevention from civilians aged 18–27, we seek to estimate the average height of male and female USMC recruits for the coming year. However, since USMC recruits are screened volunteers who must meet fitness standards, they are likely taller than the general young-adult population, so our estimates may slightly understate true recruit heights. We estimate that male recruits will average about 174.8 cm in height (95% CI: 172.5–177.0 cm) and female recruits about 165.9 cm (95% CI: 161.8–170.0 cm), with the wider interval for female recruits reflecting the smaller number of female observations in our sample. Our estimates are likely too low because USMC recruits must pass a fitness screen that filters out shorter applicants, meaning the true average heights are probably a centimeter or two higher than what our NHANES-based model predicts. Additionally, our confidence intervals are probably too narrow — they only capture sampling uncertainty under the model and do not account for the validity gap between NHANES measurement procedures and USMC intake procedures, nor the representativeness gap between the general young-adult population and the self-selected recruit pool. The female interval in particular should be wider, given that our sample contains only 10 female observations.
 
 
 
